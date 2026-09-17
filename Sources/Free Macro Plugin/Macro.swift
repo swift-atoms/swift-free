@@ -1,4 +1,4 @@
-import Free_Derivation_Core
+import Free_Macro_Core
 import SwiftSyntax
 import SwiftSyntaxMacros
 

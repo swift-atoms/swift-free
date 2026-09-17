@@ -4,37 +4,37 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-    name: "swift-free-derivation",
+    name: "swift-free",
     products: [
-        .library(name: "Free Derivation", targets: ["Free Derivation"]),
-        .library(name: "Free Derivation Core", targets: ["Free Derivation Core"]),
+        .library(name: "Free Macro", targets: ["Free Macro"]),
+        .library(name: "Free Macro Core", targets: ["Free Macro Core"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-molecules/swift-base-functor-derivation.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-base-functor.git", branch: "main"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "603.0.2"..<"604.0.0"),
     ],
     targets: [
         .target(
-            name: "Free Derivation Core",
+            name: "Free Macro Core",
             dependencies: [
-                .product(name: "Base Functor Derivation Core", package: "swift-base-functor-derivation"),
+                .product(name: "Base Functor Macro Core", package: "swift-base-functor"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ]
         ),
         .macro(
-            name: "Free Derivation Macros",
+            name: "Free Macro Plugin",
             dependencies: [
-                "Free Derivation Core",
+                "Free Macro Core",
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
             ]
         ),
-        .target(name: "Free Derivation", dependencies: ["Free Derivation Macros"]),
+        .target(name: "Free Macro", dependencies: ["Free Macro Plugin"]),
         .testTarget(
-            name: "Free Derivation Tests",
-            dependencies: ["Free Derivation"]
+            name: "Free Macro Tests",
+            dependencies: ["Free Macro"]
         ),
     ],
     swiftLanguageModes: [.v6]

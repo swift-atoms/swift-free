@@ -1,10 +1,10 @@
-import Base_Functor_Derivation_Core
+import Base_Functor_Macro_Core
 public import SwiftSyntax
 import SwiftSyntaxBuilder
 
 public enum Derivation {
     public static func expansion(of declaration: EnumDeclSyntax) -> [DeclSyntax] {
-        Base_Functor_Derivation_Core.Derivation.base(of: declaration)
+        Base_Functor_Macro_Core.Derivation.base(of: declaration)
             + carrier(of: declaration)
     }
 
