@@ -1,6 +1,8 @@
+import Functor_Base_Macro
 import Free_Macro
 import Testing
 
+@FunctorBase
 @Free
 private indirect enum Natural {
     case zero

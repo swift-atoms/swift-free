@@ -5,9 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "swift-free",
+    platforms: [.macOS(.v27), .iOS(.v27), .tvOS(.v27), .watchOS(.v27), .visionOS(.v27)],
     products: [
         .library(name: "Free Macro", targets: ["Free Macro"]),
-        .library(name: "Free Macro Core", targets: ["Free Macro Core"]),
     ],
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-functor.git", branch: "main"),
@@ -17,7 +17,6 @@ let package = Package(
         .target(
             name: "Free Macro Core",
             dependencies: [
-                .product(name: "Functor Base Macro Core", package: "swift-functor"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ]
@@ -34,7 +33,8 @@ let package = Package(
         .target(name: "Free Macro", dependencies: ["Free Macro Plugin"]),
         .testTarget(
             name: "Free Macro Tests",
-            dependencies: ["Free Macro"]
+            dependencies: [
+                .product(name: "Functor Base Macro", package: "swift-functor"),"Free Macro"]
         ),
     ],
     swiftLanguageModes: [.v6]
@@ -53,4 +53,9 @@ for target in package.targets where ![.system, .binary, .plugin, .macro].contain
     let package: [SwiftSetting] = []
 
     target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
+}
+
+// Consumer compilation must reject visibility regressions, even when other packages suppress warnings.
+for target in package.targets where target.type == .test || target.name.hasSuffix("Consumer Fixtures") {
+    target.swiftSettings = (target.swiftSettings ?? []) + [.treatAllWarnings(as: .error)]
 }
