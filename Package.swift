@@ -10,6 +10,7 @@ let package = Package(
         .library(name: "Free Macro", targets: ["Free Macro"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-atoms/swift-algebra.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-functor.git", branch: "main"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "603.0.2"..<"604.0.0"),
     ],
@@ -17,6 +18,7 @@ let package = Package(
         .target(
             name: "Free Macro Core",
             dependencies: [
+                .product(name: "Type Algebra Syntax", package: "swift-algebra"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ]
