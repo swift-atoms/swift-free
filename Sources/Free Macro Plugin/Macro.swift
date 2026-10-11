@@ -2,7 +2,9 @@ import Free_Macro_Core
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-public struct Macro: MemberMacro {
+public struct Macro: MemberMacro {}
+
+extension Macro {
     public static func expansion(
         of _: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
