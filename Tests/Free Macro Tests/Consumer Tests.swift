@@ -1,5 +1,5 @@
-import Functor_Base_Macro
 import Free_Macro
+import Functor_Base_Macro
 import Testing
 
 @FunctorBase
@@ -12,7 +12,7 @@ private indirect enum Natural {
 @Test
 func `free carrier represents pure and suspended layers`() {
     let value = Natural.Free<Int>.suspend(.successor(.pure(42)))
-    guard case let .suspend(.successor(.pure(number))) = value else {
+    guard case .suspend(.successor(.pure(let number))) = value else {
         Issue.record("Expected suspended pure successor")
         return
     }

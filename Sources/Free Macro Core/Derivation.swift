@@ -1,13 +1,12 @@
-import Type_Algebra_Syntax
 public import SwiftSyntax
 import SwiftSyntaxBuilder
+import Type_Algebra_Syntax
 
 public enum Derivation {}
 
 extension Derivation {
     public static func expansion(of declaration: EnumDeclSyntax) -> [DeclSyntax] {
-        do { return try derive(declaration) }
-        catch { return [DeclSyntax(stringLiteral: "#error(\(String(reflecting: String(describing: error))))")] }
+        do { return try derive(declaration) } catch { return [DeclSyntax(stringLiteral: "#error(\(String(reflecting: String(describing: error))))")] }
     }
 
     private static func derive(_ declaration: EnumDeclSyntax) throws -> [DeclSyntax] {
@@ -17,14 +16,16 @@ extension Derivation {
 
         let representation = Type.Syntax.Interpretation(
             atoms: [.init("Value"): TypeSyntax(stringLiteral: "Value")],
-            representations: [layer.expression: TypeSyntax(stringLiteral: "Base<Free<Value>>")])
+            representations: [layer.expression: TypeSyntax(stringLiteral: "Base<Free<Value>>")]
+        )
         let access = Type.Syntax.Recursion.access(of: declaration)
 
         guard case .sum(let alternatives) = carrier.body else { throw Type.Failure("free carrier requires a sum") }
         let cases = try zip(["pure", "suspend"], alternatives).map {
             "case \($0)(\(try representation.type($1)))"
         }.joined(separator: "\n")
-        return ["""
+        return [
+            """
             \(raw: access)indirect enum Free<Value> {
                 \(raw: cases)
 
@@ -49,6 +50,7 @@ extension Derivation {
                     flatMap { $0 }
                 }
             }
-            """]
+            """
+        ]
     }
 }

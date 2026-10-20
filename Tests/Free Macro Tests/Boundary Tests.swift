@@ -1,5 +1,5 @@
-import Functor_Base_Macro
 import Free_Macro
+import Functor_Base_Macro
 import Testing
 
 @FunctorBase
@@ -10,12 +10,15 @@ private indirect enum Count {
 }
 
 private func evaluate(_ value: Count.Free<Int>) -> Int {
-    value.fold(pure: { $0 }, suspend: { layer in
-        switch layer {
-        case .zero: 0
-        case let .successor(child): child + 1
+    value.fold(
+        pure: { $0 },
+        suspend: { layer in
+            switch layer {
+            case .zero: 0
+            case .successor(let child): child + 1
+            }
         }
-    })
+    )
 }
 
 @Suite
